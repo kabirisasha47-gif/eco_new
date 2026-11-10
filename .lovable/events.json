@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "events": {
+    "project.bill_confirmed": {
+      "event_schema_version": 1,
+      "description": "User confirmed the electricity bill data on the bill screen (prefilled or read from an uploaded photo by AI).",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source",
+          "edited",
+          "issue_count"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "prefilled",
+              "ai_upload"
+            ]
+          },
+          "edited": {
+            "type": "boolean"
+          },
+          "issue_count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "project.login_code_requested": {
+      "event_schema_version": 1,
+      "description": "User entered a valid mobile number and requested a login verification code (first step of the funnel).",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "resend"
+        ],
+        "properties": {
+          "resend": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "project.order_placed": {
+      "event_schema_version": 1,
+      "description": "User selected a valid equipment quote and placed the order (last step of the funnel).",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "supplier_id",
+          "price_rank",
+          "order_value_rial"
+        ],
+        "properties": {
+          "supplier_id": {
+            "type": "string",
+            "enum": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "price_rank": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "order_value_rial": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "project.otp_completed": {
+      "event_schema_version": 1,
+      "description": "User entered the 6-digit verification code, accepted consent and signed in.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "resent"
+        ],
+        "properties": {
+          "resent": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
