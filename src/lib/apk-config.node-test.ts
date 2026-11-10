@@ -9,9 +9,11 @@ import {
   generateAssetLinksJson,
   generateBuildApkScript,
   generateCapacitorConfigJson,
+  generateExpoConfigJson,
   generateTwaManifestJson,
   normalizeOriginHost,
 } from "./apk-config";
+import { generateQrMatrix } from "./qr-code";
 
 test("APK_META defines standard Android package identifier and SDK versions", () => {
   assert.equal(APK_META.packageId, "ir.ecosolar.app");
@@ -80,4 +82,18 @@ test("generateAssetLinksJson, generateAndroidManifestXml, and generateBuildApkSc
   const sh = generateBuildApkScript("https://app.ecosolar.ir", "ir.ecosolar.app");
   assert.ok(sh.includes("#!/usr/bin/env bash"));
   assert.ok(sh.includes("@bubblewrap/cli"));
+});
+
+test("generateQrMatrix and generateExpoConfigJson produce valid scannable matrix and Expo EAS config", () => {
+  const matrix = generateQrMatrix(
+    "https://ais-pre-3bpimaq7uatkznzvx27b7y-49660861717.us-east1.run.app/apk",
+  );
+  assert.ok(matrix.length >= 21);
+  assert.equal(matrix.length, matrix[0]?.length);
+  // Top-left finder corner is always dark (true)
+  assert.equal(matrix[0]?.[0], true);
+
+  const expo = JSON.parse(generateExpoConfigJson("https://ecosolar.ir", "ir.ecosolar.app"));
+  assert.equal(expo.expo.android.package, "ir.ecosolar.app");
+  assert.equal(expo.eas.build.preview.android.buildType, "apk");
 });

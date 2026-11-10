@@ -332,3 +332,49 @@ echo "📦 فایل خروجی: ./app-release-signed.apk (آماده نصب رو
 echo "=============================================================================="
 `;
 }
+
+export function generateExpoConfigJson(originUrl: string, packageId = APK_META.packageId): string {
+  const { origin } = normalizeOriginHost(originUrl);
+  return JSON.stringify(
+    {
+      expo: {
+        name: APK_META.appName,
+        slug: "ecosolar-app",
+        version: APK_META.versionName,
+        orientation: "portrait",
+        icon: "./public/icon-512.png",
+        userInterfaceStyle: "light",
+        splash: {
+          image: "./public/icon-512.png",
+          resizeMode: "contain",
+          backgroundColor: APK_META.splashColor,
+        },
+        android: {
+          package: packageId,
+          versionCode: APK_META.versionCode,
+          adaptiveIcon: {
+            foregroundImage: "./public/icon-512.png",
+            backgroundColor: APK_META.splashColor,
+          },
+        },
+        extra: {
+          webAppUrl: origin,
+          eas: {
+            buildProfile: "preview-apk",
+          },
+        },
+      },
+      eas: {
+        build: {
+          preview: {
+            android: {
+              buildType: "apk",
+            },
+          },
+        },
+      },
+    },
+    null,
+    2,
+  );
+}

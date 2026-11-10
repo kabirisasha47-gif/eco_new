@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "اکوسولار",
+    "slug": "ecosolar-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./public/icon-512.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./public/icon-512.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F5C800"
+    },
+    "android": {
+      "package": "ir.ecosolar.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./public/icon-512.png",
+        "backgroundColor": "#F5C800"
+      }
+    }
+  }
+}

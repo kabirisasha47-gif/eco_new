@@ -5,11 +5,12 @@ import {
   Download,
   FileCode2,
   PackageCheck,
+  QrCode,
   ShieldCheck,
   Smartphone,
   Terminal,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { BottomNav } from "@/components/eco/BottomNav";
@@ -37,9 +38,11 @@ import {
   generateAssetLinksJson,
   generateBuildApkScript,
   generateCapacitorConfigJson,
+  generateExpoConfigJson,
   generateTwaManifestJson,
 } from "@/lib/apk-config";
 import { fa, faDigits } from "@/lib/fa";
+import { generateQrMatrix } from "@/lib/qr-code";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/apk")({
@@ -83,8 +86,10 @@ function ApkCenterScreen() {
   const [sha256, setSha256] = useState<string>(APK_META.defaultSha256);
   const [codeSheetOpen, setCodeSheetOpen] = useState(false);
   const [infoSheetOpen, setInfoSheetOpen] = useState(false);
+  const [qrSheetOpen, setQrSheetOpen] = useState(false);
   const [activeFileTab, setActiveFileTab] = useState<
     | "manifest.json"
+    | "app.json"
     | "build-apk.sh"
     | "twa-manifest.json"
     | "capacitor.config.json"
@@ -98,6 +103,9 @@ function ApkCenterScreen() {
       setOriginUrl(window.location.origin);
     }
   }, []);
+
+  const qrTargetUrl = `${originUrl.replace(/\/$/, "")}/apk`;
+  const qrMatrix = useMemo(() => generateQrMatrix(qrTargetUrl), [qrTargetUrl]);
 
   const readiness = evaluateApkReadiness({
     hasManifest: true,
@@ -113,6 +121,7 @@ function ApkCenterScreen() {
   function getGeneratedFileContent(
     tab:
       | "manifest.json"
+      | "app.json"
       | "build-apk.sh"
       | "twa-manifest.json"
       | "capacitor.config.json"
@@ -160,6 +169,8 @@ function ApkCenterScreen() {
           null,
           2,
         );
+      case "app.json":
+        return generateExpoConfigJson(originUrl, packageId);
       case "build-apk.sh":
         return generateBuildApkScript(originUrl, packageId);
       case "twa-manifest.json":
@@ -221,6 +232,7 @@ function ApkCenterScreen() {
   function handleDownloadSingleFile(
     tab:
       | "manifest.json"
+      | "app.json"
       | "build-apk.sh"
       | "twa-manifest.json"
       | "capacitor.config.json"
@@ -339,9 +351,9 @@ function ApkCenterScreen() {
               <Download className="size-4" />
               دانلود پروژه اندروید (.zip)
             </a>
-            <WhiteButton onClick={handleDownloadBundle} className="h-12 gap-1.5 px-4 text-xs">
-              <Terminal className="size-4" />
-              بسته JSON
+            <WhiteButton onClick={() => setQrSheetOpen(true)} className="h-12 gap-1.5 px-4 text-xs">
+              <QrCode className="size-4" />
+              نصب با QR / Expo
             </WhiteButton>
           </div>
 
@@ -458,6 +470,86 @@ function ApkCenterScreen() {
         <BottomNav active="/profile" />
       </SunPanel>
 
+      {/* QR Code & Expo Install Sheet */}
+      <Sheet
+        open={qrSheetOpen}
+        onOpenChange={setQrSheetOpen}
+        title="نصب با اسکن QR Code و Expo"
+        description="اسکن با دوربین گوشی اندروید یا ساخت لینک Expo EAS"
+      >
+        <div className="flex flex-col items-center rounded-3xl bg-sun-soft p-4 text-center">
+          <div className="rounded-2xl bg-card p-3 shadow-soft">
+            <svg
+              viewBox={`0 0 ${qrMatrix.length + 4} ${qrMatrix.length + 4}`}
+              className="size-44"
+              role="img"
+              aria-label="QR Code نصب نسخه اندروید اکوسولار"
+            >
+              <rect width={qrMatrix.length + 4} height={qrMatrix.length + 4} fill="#ffffff" />
+              {qrMatrix.map((row, r) =>
+                row.map((cell, c) =>
+                  cell ? (
+                    <rect
+                      key={`${r}-${c}`}
+                      x={c + 2}
+                      y={r + 2}
+                      width={1}
+                      height={1}
+                      fill="#171717"
+                    />
+                  ) : null,
+                ),
+              )}
+            </svg>
+          </div>
+          <p className="mt-3 text-xs font-extrabold text-foreground">
+            با دوربین گوشی یا Google Lens اسکن کنید
+          </p>
+          <p
+            dir="ltr"
+            className="mt-1 max-w-full truncate font-mono text-[0.65rem] text-muted-foreground"
+          >
+            {qrTargetUrl}
+          </p>
+        </div>
+
+        <div className="mt-3 space-y-2 text-xs leading-6 text-foreground/85">
+          <div className="rounded-2xl bg-muted/60 p-3">
+            <p className="font-extrabold text-foreground">نحوه کارکرد با دوربین اندروید و Expo:</p>
+            <p className="mt-1">
+              • <strong>اسکن مستقیم با دوربین گوشی (بدون نیاز به Expo Go)</strong>: کد بالا را با
+              دوربین گوشی اسکن کنید تا صفحه در Chrome باز شود و با زدن دکمه «نصب» مستقیماً WebAPK
+              نصب گردد.
+            </p>
+            <p className="mt-1">
+              • <strong>ساخت QR Code در سرویس ابری Expo (EAS Build)</strong>: فایل‌های{" "}
+              <code dir="ltr">app.json</code> و <code dir="ltr">eas.json</code> در ریشه پروژه آماده
+              شده‌اند. با اجرای دستور{" "}
+              <code dir="ltr">npx eas-cli build -p android --profile preview</code>، سرویس ابری Expo
+              فایل <code dir="ltr">.apk</code> را ساخته و یک QR Code اختصاصی برای نصب مستقیم به شما
+              می‌دهد.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 flex gap-2">
+          <InkButton
+            onClick={() => handleDownloadSingleFile("app.json")}
+            className="h-12 gap-2 text-sm"
+          >
+            <Download className="size-4" />
+            دانلود app.json (Expo)
+          </InkButton>
+          <WhiteButton
+            onClick={() => copyContent(qrTargetUrl, "لینک نصب مستقیم")}
+            className="h-12 gap-1.5 border border-border px-4 text-xs"
+          >
+            <Copy className="size-4" />
+            کپی لینک
+          </WhiteButton>
+        </div>
+      </Sheet>
+
       {/* Technical Files & Code Sheet */}
       <Sheet
         open={codeSheetOpen}
@@ -469,6 +561,7 @@ function ApkCenterScreen() {
           {(
             [
               "manifest.json",
+              "app.json",
               "build-apk.sh",
               "twa-manifest.json",
               "capacitor.config.json",
