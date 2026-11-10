@@ -77,7 +77,11 @@ export function channelsConflict(a: ChannelId, b: ChannelId): boolean {
 }
 
 /** Standard annuity monthly installment. */
-export function monthlyInstallment(principal: number, annualRatePct: number, months: number): number {
+export function monthlyInstallment(
+  principal: number,
+  annualRatePct: number,
+  months: number,
+): number {
   if (months <= 0) return 0;
   const r = annualRatePct / 1200;
   if (r === 0) return principal / months;
@@ -85,7 +89,11 @@ export function monthlyInstallment(principal: number, annualRatePct: number, mon
 }
 
 /** Largest loan whose installment the given monthly income fully covers. */
-export function maxCoverableLoan(monthlyIncome: number, annualRatePct: number, months: number): number {
+export function maxCoverableLoan(
+  monthlyIncome: number,
+  annualRatePct: number,
+  months: number,
+): number {
   const r = annualRatePct / 1200;
   if (r === 0) return monthlyIncome * months;
   return (monthlyIncome * (1 - Math.pow(1 + r, -months))) / r;
@@ -101,7 +109,11 @@ export function coverageRatio(monthlyIncome: number, installment: number): numbe
 export const ANNUAL_RATE_ADJUSTMENT = 0.5;
 
 /** Coverage per year assuming income grows by the annual rate adjustment. */
-export function coverageByYear(firstYear: number, years = 3, growth = ANNUAL_RATE_ADJUSTMENT): number[] {
+export function coverageByYear(
+  firstYear: number,
+  years = 3,
+  growth = ANNUAL_RATE_ADJUSTMENT,
+): number[] {
   return Array.from({ length: years }, (_, i) => Math.min(1, firstYear * Math.pow(1 + growth, i)));
 }
 

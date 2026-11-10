@@ -5,7 +5,18 @@ import { toast } from "sonner";
 
 import { BottomNav } from "@/components/eco/BottomNav";
 import { Sheet } from "@/components/eco/Sheet";
-import { ActionCard, HeroStat, InkButton, PanelTitle, Pill, Screen, ScreenHeader, SunPanel, TopArea, WhiteButton } from "@/components/eco/ui";
+import {
+  ActionCard,
+  HeroStat,
+  InkButton,
+  PanelTitle,
+  Pill,
+  Screen,
+  ScreenHeader,
+  SunPanel,
+  TopArea,
+  WhiteButton,
+} from "@/components/eco/ui";
 import { useEco } from "@/lib/eco-store";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +24,10 @@ export const Route = createFileRoute("/case")({
   head: () => ({
     meta: [
       { title: "پرونده نیروگاه | اکوسولار" },
-      { name: "description", content: "پیگیری مراحل مجوز، بازدید شرکت توزیع و نصب پیمانکار نیروگاه خورشیدی." },
+      {
+        name: "description",
+        content: "پیگیری مراحل مجوز، بازدید شرکت توزیع و نصب پیمانکار نیروگاه خورشیدی.",
+      },
       { property: "og:title", content: "پرونده نیروگاه | اکوسولار" },
       { property: "og:description", content: "پیگیری مراحل مجوز و نصب نیروگاه خورشیدی." },
       { property: "og:type", content: "website" },
@@ -52,7 +66,11 @@ function CaseScreen() {
   return (
     <Screen>
       <TopArea>
-        <ScreenHeader title="پرونده نیروگاه" subtitle="کد رهگیری مهرسان ۰۴۱۲-۷۷۸۱۵" backTo="/quotes" />
+        <ScreenHeader
+          title="پرونده نیروگاه"
+          subtitle="کد رهگیری مهرسان ۰۴۱۲-۷۷۸۱۵"
+          backTo="/quotes"
+        />
         <HeroStat
           label="مرحله جاری"
           value="۴ از ۷"
@@ -94,19 +112,36 @@ function CaseScreen() {
                 )}
               >
                 {s.state === "done" ? <Check className="size-3.5" strokeWidth={3} /> : null}
-                {s.state === "current" ? <span className="size-3 rounded-full bg-sun-deep" /> : null}
+                {s.state === "current" ? (
+                  <span className="size-3 rounded-full bg-sun-deep" />
+                ) : null}
               </span>
               <div className="min-w-0 flex-1">
-                <p className={cn("font-extrabold", s.state === "todo" && "text-foreground/40")}>{s.title}</p>
-                <p className={cn("text-xs text-muted-foreground", s.state === "todo" && "opacity-70")}>{s.note}</p>
+                <p className={cn("font-extrabold", s.state === "todo" && "text-foreground/40")}>
+                  {s.title}
+                </p>
+                <p
+                  className={cn(
+                    "text-xs text-muted-foreground",
+                    s.state === "todo" && "opacity-70",
+                  )}
+                >
+                  {s.note}
+                </p>
               </div>
               {s.docs ? (
-                <button type="button" onClick={() => setDocsOpen(true)} className="self-center text-xs font-extrabold underline-offset-4 hover:underline">
+                <button
+                  type="button"
+                  onClick={() => setDocsOpen(true)}
+                  className="self-center text-xs font-extrabold underline-offset-4 hover:underline"
+                >
                   مدارک
                 </button>
               ) : null}
               {s.state === "current" ? (
-                <Pill tone="sun" size="sm" className="h-7 self-center bg-sun px-3 text-xs">جاری</Pill>
+                <Pill tone="sun" size="sm" className="h-7 self-center bg-sun px-3 text-xs">
+                  جاری
+                </Pill>
               ) : null}
             </li>
           ))}
@@ -114,7 +149,9 @@ function CaseScreen() {
       </TopArea>
 
       <SunPanel>
-        <PanelTitle aside={<span className="num text-sm font-extrabold">۰ از ۵</span>}>مراحل نصب پیمانکار</PanelTitle>
+        <PanelTitle aside={<span className="num text-sm font-extrabold">۰ از ۵</span>}>
+          مراحل نصب پیمانکار
+        </PanelTitle>
         <div className="mt-4 grid grid-cols-5 gap-2">
           {INSTALL_STAGES.map((s) => (
             <div key={s} className="text-center">
@@ -147,21 +184,36 @@ function CaseScreen() {
         <BottomNav active="/case" />
       </SunPanel>
 
-      <Sheet open={docsOpen} onOpenChange={setDocsOpen} title="مدارک بارگذاری‌شده" description="همه مدارک توسط کارشناس تأیید شده‌اند.">
+      <Sheet
+        open={docsOpen}
+        onOpenChange={setDocsOpen}
+        title="مدارک بارگذاری‌شده"
+        description="همه مدارک توسط کارشناس تأیید شده‌اند."
+      >
         <ul className="space-y-2">
           {DOCS.map((d) => (
-            <li key={d.name} className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-soft">
+            <li
+              key={d.name}
+              className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-soft"
+            >
               <span className="grid size-10 place-items-center rounded-full bg-sun-soft">
                 <FileText className="size-4" />
               </span>
               <span className="flex-1 text-sm font-bold">{d.name}</span>
-              <Pill tone="success" size="sm">تأیید، {d.date}</Pill>
+              <Pill tone="success" size="sm">
+                تأیید، {d.date}
+              </Pill>
             </li>
           ))}
         </ul>
       </Sheet>
 
-      <Sheet open={visitOpen} onOpenChange={setVisitOpen} title="بازدید فنی شرکت توزیع" description="کارشناس برای بررسی بام و انشعاب مراجعه می‌کند. لطفاً در زمان بازدید در محل حضور داشته باشید.">
+      <Sheet
+        open={visitOpen}
+        onOpenChange={setVisitOpen}
+        title="بازدید فنی شرکت توزیع"
+        description="کارشناس برای بررسی بام و انشعاب مراجعه می‌کند. لطفاً در زمان بازدید در محل حضور داشته باشید."
+      >
         <div className="rounded-3xl bg-card p-4 shadow-soft">
           <p className="text-xs text-muted-foreground">زمان پیشنهادی</p>
           <p className="mt-1 text-lg font-extrabold">سه‌شنبه ۲۰ آبان ۱۴۰۵</p>
@@ -172,7 +224,9 @@ function CaseScreen() {
             onClick={() => {
               update({ visitConfirmed: true });
               setVisitOpen(false);
-              toast.success("زمان بازدید تأیید شد", { description: "یادآوری یک روز قبل برای شما ارسال می‌شود" });
+              toast.success("زمان بازدید تأیید شد", {
+                description: "یادآوری یک روز قبل برای شما ارسال می‌شود",
+              });
             }}
           >
             {state.visitConfirmed ? "تأیید شده" : "تأیید زمان"}
@@ -182,7 +236,9 @@ function CaseScreen() {
             onClick={() => {
               update({ visitConfirmed: false });
               setVisitOpen(false);
-              toast("درخواست تغییر زمان ارسال شد", { description: "شرکت توزیع زمان جدید پیشنهاد می‌دهد" });
+              toast("درخواست تغییر زمان ارسال شد", {
+                description: "شرکت توزیع زمان جدید پیشنهاد می‌دهد",
+              });
             }}
           >
             درخواست تغییر

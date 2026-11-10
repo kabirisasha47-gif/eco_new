@@ -1,0 +1,27 @@
+{
+  "appId": "ir.ecosolar.app",
+  "appName": "اکوسولار",
+  "webDir": "dist/client",
+  "bundledWebRuntime": false,
+  "android": {
+    "buildOptions": {
+      "keystorePath": "android.keystore",
+      "keystoreAlias": "ecosolar-key",
+      "releaseType": "APK"
+    },
+    "backgroundColor": "#f4f4f4",
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "backgroundColor": "#f5c800",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "LIGHT",
+      "backgroundColor": "#f4f4f4"
+    }
+  }
+}

@@ -113,7 +113,13 @@ interface ScreenHeaderProps {
   end?: "bell" | ReactNode;
 }
 
-export function ScreenHeader({ title, subtitle, backTo, start = "back", end = "bell" }: ScreenHeaderProps) {
+export function ScreenHeader({
+  title,
+  subtitle,
+  backTo,
+  start = "back",
+  end = "bell",
+}: ScreenHeaderProps) {
   return (
     <header className="flex items-center justify-between gap-3">
       {start === "user" ? (
@@ -134,7 +140,13 @@ export function ScreenHeader({ title, subtitle, backTo, start = "back", end = "b
   );
 }
 
-export function InfoCircleButton({ onClick, label = "توضیحات" }: { onClick: () => void; label?: string }) {
+export function InfoCircleButton({
+  onClick,
+  label = "توضیحات",
+}: {
+  onClick: () => void;
+  label?: string;
+}) {
   return (
     <IconCircle aria-label={label} onClick={onClick}>
       <Info className="size-5" />
@@ -159,8 +171,12 @@ export function HeroStat({ label, value, unit, aside }: HeroStatProps) {
       <p className="text-sm text-muted-foreground">{label}</p>
       <div className="mt-1 flex items-end justify-between gap-3">
         <div className="flex min-w-0 items-baseline gap-2">
-          <span className="num text-[3.5rem] font-black leading-[1.05] text-foreground">{value}</span>
-          {unit ? <span className="whitespace-nowrap text-sm text-muted-foreground">{unit}</span> : null}
+          <span className="num text-[3.5rem] font-black leading-[1.05] text-foreground">
+            {value}
+          </span>
+          {unit ? (
+            <span className="whitespace-nowrap text-sm text-muted-foreground">{unit}</span>
+          ) : null}
         </div>
         {aside}
       </div>
@@ -187,7 +203,12 @@ interface DropdownPillProps<T extends string> {
   label?: string;
 }
 
-export function DropdownPill<T extends string>({ value, options, onChange, label }: DropdownPillProps<T>) {
+export function DropdownPill<T extends string>({
+  value,
+  options,
+  onChange,
+  label,
+}: DropdownPillProps<T>) {
   const current = options.find((o) => o.value === value);
   return (
     <DropdownMenu dir="rtl">
@@ -201,7 +222,11 @@ export function DropdownPill<T extends string>({ value, options, onChange, label
       <DropdownMenuContent align="end" className="min-w-36 rounded-2xl p-1.5 font-sans">
         <DropdownMenuRadioGroup value={value} onValueChange={(v) => onChange(v as T)}>
           {options.map((o) => (
-            <DropdownMenuRadioItem key={o.value} value={o.value} className="rounded-xl py-2 text-sm">
+            <DropdownMenuRadioItem
+              key={o.value}
+              value={o.value}
+              className="rounded-xl py-2 text-sm"
+            >
               {o.label}
             </DropdownMenuRadioItem>
           ))}
@@ -287,7 +312,9 @@ export function InfoRow({
         {label}
         {badge}
       </span>
-      <span dir="auto" className="num text-sm font-extrabold text-foreground">{value}</span>
+      <span dir="auto" className="num text-sm font-extrabold text-foreground">
+        {value}
+      </span>
     </div>
   );
 }
@@ -335,7 +362,15 @@ export function ActionCard({
   );
 }
 
-export function Footnote({ icon, children, className }: { icon?: ReactNode; children: ReactNode; className?: string }) {
+export function Footnote({
+  icon,
+  children,
+  className,
+}: {
+  icon?: ReactNode;
+  children: ReactNode;
+  className?: string;
+}) {
   return (
     <p
       className={cn(

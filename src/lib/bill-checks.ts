@@ -5,7 +5,8 @@
 
 export type Confidence = "high" | "medium" | "low";
 
-export type BillField = "billId" | "period" | "peakKwh" | "midKwh" | "lowKwh" | "totalKwh" | "amountRial";
+export type BillField =
+  "billId" | "period" | "peakKwh" | "midKwh" | "lowKwh" | "totalKwh" | "amountRial";
 
 export interface ExtractedBill {
   isElectricityBill: boolean;
@@ -53,7 +54,8 @@ export function fieldLabel(f: BillField | "general") {
 /** Deterministic checks; never depends on the model's judgement. */
 export function checkBillConsistency(b: ExtractedBill): BillIssue[] {
   const issues: BillIssue[] = [];
-  const add = (field: BillIssue["field"], message: string) => issues.push({ field, message, source: "rule" });
+  const add = (field: BillIssue["field"], message: string) =>
+    issues.push({ field, message, source: "rule" });
 
   if (!b.isElectricityBill) {
     add("general", "تصویر شبیه قبض برق نیست؛ لطفاً عکس واضح قبض برق را بارگذاری کنید.");
@@ -75,12 +77,17 @@ export function checkBillConsistency(b: ExtractedBill): BillIssue[] {
   }
 
   const tiers = [b.peakKwh, b.midKwh, b.lowKwh];
-  const tierSum = tiers.every((t) => t !== null) ? (tiers as number[]).reduce((a, c) => a + c, 0) : null;
+  const tierSum = tiers.every((t) => t !== null)
+    ? (tiers as number[]).reduce((a, c) => a + c, 0)
+    : null;
 
   if (tierSum !== null && b.totalKwh !== null && b.totalKwh > 0) {
     const gapPct = (Math.abs(tierSum - b.totalKwh) / b.totalKwh) * 100;
     if (gapPct > TIER_SUM_TOLERANCE_PCT) {
-      add("totalKwh", `جمع مصرف اوج، میان‌باری و کم‌باری (${tierSum}) با مصرف کل (${b.totalKwh}) همخوانی ندارد.`);
+      add(
+        "totalKwh",
+        `جمع مصرف اوج، میان‌باری و کم‌باری (${tierSum}) با مصرف کل (${b.totalKwh}) همخوانی ندارد.`,
+      );
     }
   }
 
@@ -96,7 +103,10 @@ export function checkBillConsistency(b: ExtractedBill): BillIssue[] {
     }
   }
 
-  if (b.periodDays !== null && (b.periodDays < PERIOD_DAYS_RANGE.min || b.periodDays > PERIOD_DAYS_RANGE.max)) {
+  if (
+    b.periodDays !== null &&
+    (b.periodDays < PERIOD_DAYS_RANGE.min || b.periodDays > PERIOD_DAYS_RANGE.max)
+  ) {
     add("period", `طول دوره صورتحساب (${b.periodDays} روز) غیرمعمول است.`);
   }
 

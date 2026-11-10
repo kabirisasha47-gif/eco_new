@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate, type LinkProps } from "@tanstack/react-router";
-import { ChevronLeft, LogOut, User } from "lucide-react";
+import { ChevronLeft, LogOut, Smartphone, User } from "lucide-react";
 import { toast } from "sonner";
 
 import { BottomNav } from "@/components/eco/BottomNav";
+import { PWAInstallBanner } from "@/components/eco/PWAInstallBanner";
 import { Screen, ScreenHeader, SunPanel, TopArea } from "@/components/eco/ui";
 import { useEco } from "@/lib/eco-store";
 import { faDigits } from "@/lib/fa";
@@ -11,7 +12,10 @@ export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
       { title: "پروفایل و مسیر نیروگاه | اکوسولار" },
-      { name: "description", content: "اطلاعات حساب و دسترسی سریع به همه مراحل مسیر نیروگاه خورشیدی." },
+      {
+        name: "description",
+        content: "اطلاعات حساب و دسترسی سریع به همه مراحل مسیر نیروگاه خورشیدی.",
+      },
       { property: "og:title", content: "پروفایل | اکوسولار" },
       { property: "og:description", content: "اطلاعات حساب و مسیر نیروگاه خورشیدی." },
       { property: "og:type", content: "website" },
@@ -32,6 +36,7 @@ const JOURNEY: { n: string; title: string; to: NonNullable<LinkProps["to"]> }[] 
   { n: "۰۸", title: "پیش‌فاکتورها", to: "/quotes" },
   { n: "۰۹", title: "پرونده نیروگاه", to: "/case" },
   { n: "۱۰", title: "درآمد و تطبیق", to: "/income" },
+  { n: "۱۱", title: "نسخه اندروید (APK)", to: "/apk" },
 ];
 
 function ProfileScreen() {
@@ -55,16 +60,34 @@ function ProfileScreen() {
           </div>
           <span className="text-xs text-muted-foreground">نجف‌آباد</span>
         </div>
+        <div className="mt-3">
+          <PWAInstallBanner />
+        </div>
       </TopArea>
 
       <SunPanel>
-        <h2 className="text-xl font-extrabold">مسیر نیروگاه</h2>
-        <p className="mt-1 text-xs text-foreground/75">از ورود تا صورتحساب مبتنی بر کنتور</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-extrabold">مسیر نیروگاه</h2>
+            <p className="mt-1 text-xs text-foreground/75">
+              از ورود تا صورتحساب مبتنی بر کنتور و نسخه اندروید
+            </p>
+          </div>
+          <Link
+            to="/apk"
+            className="flex items-center gap-1.5 rounded-full bg-ink px-3.5 py-2 text-xs font-extrabold text-ink-foreground"
+          >
+            <Smartphone className="size-3.5" />
+            مرکز APK
+          </Link>
+        </div>
         <ul className="mt-3 space-y-2">
           {JOURNEY.map((j) => (
             <li key={j.n}>
               <Link to={j.to} className="flex items-center gap-3 rounded-full bg-card px-3 py-2.5">
-                <span className="grid h-8 w-11 place-items-center rounded-full bg-sun text-xs font-black">{j.n}</span>
+                <span className="grid h-8 w-11 place-items-center rounded-full bg-sun text-xs font-black">
+                  {j.n}
+                </span>
                 <span className="flex-1 text-sm font-bold">{j.title}</span>
                 <ChevronLeft className="size-4" />
               </Link>

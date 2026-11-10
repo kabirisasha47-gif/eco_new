@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ChevronDown, ChevronUp, Eye, EyeOff, ReceiptText } from "lucide-react";
+import { ChevronDown, ChevronUp, Eye, EyeOff, ReceiptText, Smartphone } from "lucide-react";
 import { useState } from "react";
 
 import { BottomNav } from "@/components/eco/BottomNav";
@@ -23,9 +23,15 @@ export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
       { title: "نیروگاه من | داشبورد اکوسولار" },
-      { name: "description", content: "تولید امروز، جریان انرژی و درآمد برآوردی نیروگاه خورشیدی ۵ کیلوواتی." },
+      {
+        name: "description",
+        content: "تولید امروز، جریان انرژی و درآمد برآوردی نیروگاه خورشیدی ۵ کیلوواتی.",
+      },
       { property: "og:title", content: "نیروگاه من | اکوسولار" },
-      { property: "og:description", content: "تولید امروز، جریان انرژی و درآمد برآوردی نیروگاه خورشیدی." },
+      {
+        property: "og:description",
+        content: "تولید امروز، جریان انرژی و درآمد برآوردی نیروگاه خورشیدی.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -122,7 +128,11 @@ function DashboardScreen() {
                 onClick={() => setCollapsed((c) => !c)}
                 className="grid size-9 place-items-center rounded-full"
               >
-                {collapsed ? <ChevronDown className="size-4" /> : <ChevronUp className="size-4" strokeWidth={3} />}
+                {collapsed ? (
+                  <ChevronDown className="size-4" />
+                ) : (
+                  <ChevronUp className="size-4" strokeWidth={3} />
+                )}
               </button>
               <button
                 type="button"
@@ -137,7 +147,9 @@ function DashboardScreen() {
         >
           جریان انرژی امروز
         </PanelTitle>
-        <p className="mt-1 text-xs text-foreground/75">داده اینورتر برای پایش است؛ مبنای صورتحساب کنتور رسمی توزیع است</p>
+        <p className="mt-1 text-xs text-foreground/75">
+          داده اینورتر برای پایش است؛ مبنای صورتحساب کنتور رسمی توزیع است
+        </p>
 
         {!collapsed ? (
           <div className="mt-2">
@@ -146,7 +158,9 @@ function DashboardScreen() {
               label="درآمد برآوردی امروز"
               value={
                 <span className="flex items-center gap-2">
-                  <Pill tone="white" size="sm">برآورد</Pill>
+                  <Pill tone="white" size="sm">
+                    برآورد
+                  </Pill>
                   {hideMoney ? "••••••" : `${fa(income, 0, false)} ریال`}
                 </span>
               }
@@ -160,6 +174,13 @@ function DashboardScreen() {
           icon={<ReceiptText className="size-5" />}
           title="قرائت کنتور مهر رسید"
           subtitle="تطبیق سه‌طرفه و صورتحساب را ببینید"
+        />
+
+        <ActionCard
+          to="/apk"
+          icon={<Smartphone className="size-5" />}
+          title="دریافت نسخه اندروید (APK)"
+          subtitle="نصب مستقیم WebAPK و بسته نصبی اندروید"
         />
 
         <div className="flex-1" />

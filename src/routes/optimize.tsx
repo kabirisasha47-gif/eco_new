@@ -28,7 +28,10 @@ export const Route = createFileRoute("/optimize")({
   head: () => ({
     meta: [
       { title: "بهینه‌سازی مصرف | اکوسولار" },
-      { name: "description", content: "برنامه دمایی هوشمند بر پایه پیش‌بینی هوا و تعرفه برای کاهش مصرف برق." },
+      {
+        name: "description",
+        content: "برنامه دمایی هوشمند بر پایه پیش‌بینی هوا و تعرفه برای کاهش مصرف برق.",
+      },
       { property: "og:title", content: "بهینه‌سازی مصرف | اکوسولار" },
       { property: "og:description", content: "برنامه دمایی هوشمند برای کاهش مصرف برق." },
       { property: "og:type", content: "website" },
@@ -38,10 +41,34 @@ export const Route = createFileRoute("/optimize")({
   component: OptimizeScreen,
 });
 
-const PLANS: Record<PlanId, { name: string; desc: string; saving: number; kwh: number; preCool: number; peakTemp: number }> = {
-  economy: { name: "اقتصادی", desc: "بیشترین صرفه‌جویی، دمای اوج ۲۸ درجه", saving: 34, kwh: 228, preCool: 23, peakTemp: 28 },
-  balanced: { name: "متعادل", desc: "پیشنهاد هوش مصنوعی برای خانه شما", saving: 28, kwh: 188, preCool: 24, peakTemp: 27 },
-  comfort: { name: "راحتی", desc: "تغییر دمای کمتر، صرفه‌جویی کمتر", saving: 17, kwh: 114, preCool: 24, peakTemp: 26 },
+const PLANS: Record<
+  PlanId,
+  { name: string; desc: string; saving: number; kwh: number; preCool: number; peakTemp: number }
+> = {
+  economy: {
+    name: "اقتصادی",
+    desc: "بیشترین صرفه‌جویی، دمای اوج ۲۸ درجه",
+    saving: 34,
+    kwh: 228,
+    preCool: 23,
+    peakTemp: 28,
+  },
+  balanced: {
+    name: "متعادل",
+    desc: "پیشنهاد هوش مصنوعی برای خانه شما",
+    saving: 28,
+    kwh: 188,
+    preCool: 24,
+    peakTemp: 27,
+  },
+  comfort: {
+    name: "راحتی",
+    desc: "تغییر دمای کمتر، صرفه‌جویی کمتر",
+    saving: 17,
+    kwh: 114,
+    preCool: 24,
+    peakTemp: 26,
+  },
 };
 
 function stepsFor(plan: PlanId): SetpointStep[] {
@@ -88,27 +115,36 @@ function OptimizeScreen() {
           }
         />
         <div className="mt-3">
-          <Pill tone="sun">سناریو، مبتنی بر پیش‌بینی دمای {day === "today" ? "فردا" : "پس‌فردا"}</Pill>
+          <Pill tone="sun">
+            سناریو، مبتنی بر پیش‌بینی دمای {day === "today" ? "فردا" : "پس‌فردا"}
+          </Pill>
         </div>
         <TempPlanChart steps={stepsFor(plan)} shift={shift} preCool={p.preCool} />
       </TopArea>
 
       <SunPanel>
-        <PanelTitle aside={<InfoCircleButton onClick={() => setInfoOpen(true)} />}>چرا این پیشنهاد؟</PanelTitle>
+        <PanelTitle aside={<InfoCircleButton onClick={() => setInfoOpen(true)} />}>
+          چرا این پیشنهاد؟
+        </PanelTitle>
         <div className="mt-2">
           <InfoRow label="ضریب حساسیت دمایی" value="۰,۰۷ بر هر درجه" />
           <InfoRow label="منبع دما" value="پیش‌بینی هواشناسی نجف‌آباد" />
           <InfoRow label="تجهیز اصلی" value="کولر گازی ۲,۲ کیلووات" />
           <InfoRow label="نسخه جدول نرخ" value={RATE_TABLE_VERSION} last />
         </div>
-        <div className="mt-3 rounded-full bg-card px-4 py-3 text-center text-xs font-bold" dir="ltr">
+        <div
+          className="mt-3 rounded-full bg-card px-4 py-3 text-center text-xs font-bold"
+          dir="ltr"
+        >
           E = P × t × (1 + α·|T_amb − T_set|)
         </div>
         <div className="mt-5 flex gap-3">
           <InkButton
             onClick={() => {
               update({ plan, planAccepted: true });
-              toast.success(`برنامه «${p.name}» فعال شد`, { description: `پیش‌سرمایش ${fa(p.preCool)} درجه پیش از اوج تعرفه` });
+              toast.success(`برنامه «${p.name}» فعال شد`, {
+                description: `پیش‌سرمایش ${fa(p.preCool)} درجه پیش از اوج تعرفه`,
+              });
               navigate({ to: "/design" });
             }}
           >
@@ -118,7 +154,12 @@ function OptimizeScreen() {
         </div>
       </SunPanel>
 
-      <Sheet open={optionsOpen} onOpenChange={setOptionsOpen} title="گزینه‌های برنامه دمایی" description="یکی را انتخاب کنید؛ نمودار بلافاصله به‌روز می‌شود.">
+      <Sheet
+        open={optionsOpen}
+        onOpenChange={setOptionsOpen}
+        title="گزینه‌های برنامه دمایی"
+        description="یکی را انتخاب کنید؛ نمودار بلافاصله به‌روز می‌شود."
+      >
         <div className="space-y-3">
           {(Object.keys(PLANS) as PlanId[]).map((id) => {
             const it = PLANS[id];
@@ -136,7 +177,12 @@ function OptimizeScreen() {
                   active && "ring-2 ring-ink",
                 )}
               >
-                <span className={cn("grid size-7 place-items-center rounded-full", active ? "bg-ink text-ink-foreground" : "border-2 border-track-strong")}>
+                <span
+                  className={cn(
+                    "grid size-7 place-items-center rounded-full",
+                    active ? "bg-ink text-ink-foreground" : "border-2 border-track-strong",
+                  )}
+                >
                   {active ? <Check className="size-4" /> : null}
                 </span>
                 <span className="flex-1">
@@ -152,8 +198,14 @@ function OptimizeScreen() {
 
       <Sheet open={infoOpen} onOpenChange={setInfoOpen} title="منطق محاسبه">
         <div className="space-y-3 text-sm leading-7 text-foreground/85">
-          <p>مصرف کولر (E) از توان (P)، مدت کار (t) و اختلاف دمای بیرون با دمای تنظیم‌شده محاسبه می‌شود. ضریب α میزان حساسیت مصرف به هر درجه اختلاف است.</p>
-          <p>با پیش‌سرمایش خانه پیش از ساعت اوج تعرفه (۱۹ تا ۲۳) و افزایش جزئی دما در اوج، مصرف در گران‌ترین ساعات کاهش می‌یابد.</p>
+          <p>
+            مصرف کولر (E) از توان (P)، مدت کار (t) و اختلاف دمای بیرون با دمای تنظیم‌شده محاسبه
+            می‌شود. ضریب α میزان حساسیت مصرف به هر درجه اختلاف است.
+          </p>
+          <p>
+            با پیش‌سرمایش خانه پیش از ساعت اوج تعرفه (۱۹ تا ۲۳) و افزایش جزئی دما در اوج، مصرف در
+            گران‌ترین ساعات کاهش می‌یابد.
+          </p>
         </div>
       </Sheet>
     </Screen>

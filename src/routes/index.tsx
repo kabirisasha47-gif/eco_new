@@ -3,6 +3,7 @@ import { Check, Clock, Lock } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
+import { PWAInstallBanner } from "@/components/eco/PWAInstallBanner";
 import { Sheet } from "@/components/eco/Sheet";
 import { Footnote, InkButton, Screen, SunMark, SunPanel } from "@/components/eco/ui";
 import { faDigits, faTimer } from "@/lib/fa";
@@ -13,9 +14,15 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "ورود به اکوسولار | مدیریت هوشمند انرژی خورشیدی" },
-      { name: "description", content: "ورود با شماره موبایل و کد یکبار مصرف به اپلیکیشن اکوسولار." },
+      {
+        name: "description",
+        content: "ورود با شماره موبایل و کد یکبار مصرف به اپلیکیشن اکوسولار.",
+      },
       { property: "og:title", content: "ورود به اکوسولار" },
-      { property: "og:description", content: "ورود با شماره موبایل و کد یکبار مصرف به اپلیکیشن اکوسولار." },
+      {
+        property: "og:description",
+        content: "ورود با شماره موبایل و کد یکبار مصرف به اپلیکیشن اکوسولار.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -24,7 +31,10 @@ export const Route = createFileRoute("/")({
 });
 
 const RESEND_SECONDS = 92;
-const toLatin = (s: string) => s.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+const toLatin = (s: string) =>
+  s
+    .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+    .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
 function formatPhone(p: string) {
   // 09133457781 -> ۰۹۱۳ ۳۴۵ ۷۷۸۱
@@ -65,7 +75,9 @@ function LoginScreen() {
     setStep("otp");
     setSeconds(RESEND_SECONDS);
     setDigits(Array(6).fill(""));
-    toast.success(`کد ۶ رقمی به ${formatPhone(phone)} ارسال شد`, { description: "در نسخه نمایشی هر کد ۶ رقمی پذیرفته می‌شود." });
+    toast.success(`کد ۶ رقمی به ${formatPhone(phone)} ارسال شد`, {
+      description: "در نسخه نمایشی هر کد ۶ رقمی پذیرفته می‌شود.",
+    });
     setTimeout(() => inputs.current[0]?.focus(), 50);
   }
 
@@ -74,7 +86,9 @@ function LoginScreen() {
     if (v.length > 1) {
       // paste
       const next = [...digits];
-      v.slice(0, 6 - i).split("").forEach((c, k) => (next[i + k] = c));
+      v.slice(0, 6 - i)
+        .split("")
+        .forEach((c, k) => (next[i + k] = c));
       setDigits(next);
       inputs.current[Math.min(5, i + v.length)]?.focus();
       return;
@@ -95,7 +109,10 @@ function LoginScreen() {
 
   return (
     <Screen>
-      <section className="flex flex-1 flex-col items-center justify-center px-6 pb-4 pt-16 text-center">
+      <div className="px-5 pt-4">
+        <PWAInstallBanner />
+      </div>
+      <section className="flex flex-1 flex-col items-center justify-center px-6 pb-4 pt-8 text-center">
         <div className="grid size-36 place-items-center rounded-full bg-sun">
           <SunMark className="size-20 text-ink" />
         </div>
@@ -108,7 +125,9 @@ function LoginScreen() {
 
         {step === "phone" ? (
           <>
-            <p className="mt-2 text-sm text-foreground/75">شماره موبایل خود را وارد کنید تا کد تأیید ارسال شود</p>
+            <p className="mt-2 text-sm text-foreground/75">
+              شماره موبایل خود را وارد کنید تا کد تأیید ارسال شود
+            </p>
             <label className="mt-5 block">
               <span className="sr-only">شماره موبایل</span>
               <input
@@ -151,7 +170,8 @@ function LoginScreen() {
                   value={d ? faDigits(d) : ""}
                   onChange={(e) => setDigit(i, e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Backspace" && !digits[i] && i > 0) inputs.current[i - 1]?.focus();
+                    if (e.key === "Backspace" && !digits[i] && i > 0)
+                      inputs.current[i - 1]?.focus();
                     if (e.key === "Enter") submit();
                   }}
                   className="h-16 w-full min-w-0 rounded-2xl bg-card text-center text-2xl font-black outline-none focus:ring-2 focus:ring-ink"
@@ -165,7 +185,11 @@ function LoginScreen() {
                   <Clock className="size-4" /> ارسال مجدد کد تا {faTimer(seconds)}
                 </span>
               ) : (
-                <button type="button" onClick={sendCode} className="flex items-center gap-1.5 font-extrabold underline underline-offset-4">
+                <button
+                  type="button"
+                  onClick={sendCode}
+                  className="flex items-center gap-1.5 font-extrabold underline underline-offset-4"
+                >
                   <Clock className="size-4" /> ارسال مجدد کد
                 </button>
               )}
@@ -210,10 +234,21 @@ function LoginScreen() {
         </Footnote>
       </SunPanel>
 
-      <Sheet open={consentOpen} onOpenChange={setConsentOpen} title="رضایت‌نامه اشتراک داده" description="نسخه ۱,۲ — آبان ۱۴۰۵">
+      <Sheet
+        open={consentOpen}
+        onOpenChange={setConsentOpen}
+        title="رضایت‌نامه اشتراک داده"
+        description="نسخه ۱,۲ — آبان ۱۴۰۵"
+      >
         <div className="space-y-3 text-sm leading-7 text-foreground/85">
-          <p>با تأیید این رضایت‌نامه، به اکوسولار اجازه می‌دهید اطلاعات قبض برق، شناسه قبض و مشخصات انشعاب شما را از شرکت توزیع دریافت و برای تحلیل مصرف و طراحی نیروگاه استفاده کند.</p>
-          <p>داده‌ها فقط در سرورهای داخل کشور نگهداری می‌شوند و بدون اجازه شما با هیچ شخص ثالثی به اشتراک گذاشته نمی‌شوند.</p>
+          <p>
+            با تأیید این رضایت‌نامه، به اکوسولار اجازه می‌دهید اطلاعات قبض برق، شناسه قبض و مشخصات
+            انشعاب شما را از شرکت توزیع دریافت و برای تحلیل مصرف و طراحی نیروگاه استفاده کند.
+          </p>
+          <p>
+            داده‌ها فقط در سرورهای داخل کشور نگهداری می‌شوند و بدون اجازه شما با هیچ شخص ثالثی به
+            اشتراک گذاشته نمی‌شوند.
+          </p>
           <p>هر زمان بخواهید می‌توانید این رضایت را از بخش پروفایل لغو کنید.</p>
         </div>
         <InkButton

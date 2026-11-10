@@ -11,18 +11,11 @@
       "properties_schema": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "source",
-          "edited",
-          "issue_count"
-        ],
+        "required": ["source", "edited", "issue_count"],
         "properties": {
           "source": {
             "type": "string",
-            "enum": [
-              "prefilled",
-              "ai_upload"
-            ]
+            "enum": ["prefilled", "ai_upload"]
           },
           "edited": {
             "type": "boolean"
@@ -44,9 +37,7 @@
       "properties_schema": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "resend"
-        ],
+        "required": ["resend"],
         "properties": {
           "resend": {
             "type": "boolean"
@@ -64,19 +55,11 @@
       "properties_schema": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "supplier_id",
-          "price_rank",
-          "order_value_rial"
-        ],
+        "required": ["supplier_id", "price_rank", "order_value_rial"],
         "properties": {
           "supplier_id": {
             "type": "string",
-            "enum": [
-              "a",
-              "b",
-              "c"
-            ]
+            "enum": ["a", "b", "c"]
           },
           "price_rank": {
             "type": "integer",
@@ -99,9 +82,7 @@
       "properties_schema": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "resent"
-        ],
+        "required": ["resent"],
         "properties": {
           "resent": {
             "type": "boolean"

@@ -1,0 +1,29 @@
+{
+  "packageId": "ir.ecosolar.app",
+  "host": "localhost:3000",
+  "name": "اکوسولار",
+  "launcherName": "اکوسولار",
+  "display": "standalone",
+  "orientation": "portrait",
+  "themeColor": "#F4F4F4",
+  "navigationColor": "#1E1E1E",
+  "navigationColorDark": "#1E1E1E",
+  "navigationDividerColor": "#E5E5E5",
+  "navigationDividerColorDark": "#1E1E1E",
+  "backgroundColor": "#F4F4F4",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "/icon-512.png",
+  "maskableIconUrl": "/icon-512.png",
+  "appVersion": "1.0.0",
+  "appVersionCode": 1,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "ecosolar-key"
+  },
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false
+}

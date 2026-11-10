@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { checkBillConsistency, mergeIssues, overallConfidence, type ExtractedBill } from "./bill-checks";
+import {
+  checkBillConsistency,
+  mergeIssues,
+  overallConfidence,
+  type ExtractedBill,
+} from "./bill-checks";
 
 const base: ExtractedBill = {
   isElectricityBill: true,
@@ -39,7 +44,9 @@ describe("bill consistency rules", () => {
   });
 
   it("flags a bill id that is not 13 digits", () => {
-    expect(checkBillConsistency({ ...base, billId: "78103321" }).map((i) => i.field)).toEqual(["billId"]);
+    expect(checkBillConsistency({ ...base, billId: "78103321" }).map((i) => i.field)).toEqual([
+      "billId",
+    ]);
   });
 
   it("flags unreadable required fields", () => {
@@ -47,11 +54,15 @@ describe("bill consistency rules", () => {
   });
 
   it("flags an implausible amount per kWh", () => {
-    expect(checkBillConsistency({ ...base, amountRial: 100 }).map((i) => i.field)).toContain("amountRial");
+    expect(checkBillConsistency({ ...base, amountRial: 100 }).map((i) => i.field)).toContain(
+      "amountRial",
+    );
   });
 
   it("flags billing periods outside 25–70 days", () => {
-    expect(checkBillConsistency({ ...base, periodDays: 120 }).map((i) => i.field)).toContain("period");
+    expect(checkBillConsistency({ ...base, periodDays: 120 }).map((i) => i.field)).toContain(
+      "period",
+    );
   });
 
   it("stops at a single issue when the photo is not an electricity bill", () => {

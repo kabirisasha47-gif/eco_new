@@ -3,7 +3,12 @@ import { ChartNoAxesColumnIncreasing, FileText, House, Sun, User } from "lucide-
 
 import { cn } from "@/lib/utils";
 
-type Item = { to: NonNullable<LinkProps["to"]>; label: string; icon: typeof House; filled?: boolean };
+type Item = {
+  to: NonNullable<LinkProps["to"]>;
+  label: string;
+  icon: typeof House;
+  filled?: boolean;
+};
 
 const ITEMS: Item[] = [
   { to: "/dashboard", label: "خانه", icon: House, filled: true },
@@ -13,7 +18,11 @@ const ITEMS: Item[] = [
   { to: "/profile", label: "پروفایل", icon: User, filled: true },
 ];
 
-export function BottomNav({ active }: { active: "/dashboard" | "/design" | "/case" | "/income" | "/profile" }) {
+export function BottomNav({
+  active,
+}: {
+  active: "/dashboard" | "/design" | "/case" | "/income" | "/profile";
+}) {
   return (
     <nav
       aria-label="ناوبری اصلی"
@@ -32,7 +41,11 @@ export function BottomNav({ active }: { active: "/dashboard" | "/design" | "/cas
               isActive ? "bg-card shadow-soft" : "hover:bg-sun-deep/40",
             )}
           >
-            <it.icon className="size-5" fill={it.filled ? "currentColor" : "none"} strokeWidth={2.2} />
+            <it.icon
+              className="size-5"
+              fill={it.filled ? "currentColor" : "none"}
+              strokeWidth={2.2}
+            />
           </Link>
         );
       })}

@@ -1,13 +1,38 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Camera, Check, CircleCheck, Info, Loader2, Pencil, Sparkles, TriangleAlert } from "lucide-react";
+import {
+  Camera,
+  Check,
+  CircleCheck,
+  Info,
+  Loader2,
+  Pencil,
+  Sparkles,
+  TriangleAlert,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Sheet } from "@/components/eco/Sheet";
-import { Footnote, IconCircle, InkButton, Pill, Screen, ScreenHeader, SunPanel, TopArea, WhiteButton } from "@/components/eco/ui";
+import {
+  Footnote,
+  IconCircle,
+  InkButton,
+  Pill,
+  Screen,
+  ScreenHeader,
+  SunPanel,
+  TopArea,
+  WhiteButton,
+} from "@/components/eco/ui";
 import { extractBill } from "@/lib/bill-ai.functions";
-import { fieldLabel, mergeIssues, overallConfidence, type BillField, type BillIssue } from "@/lib/bill-checks";
+import {
+  fieldLabel,
+  mergeIssues,
+  overallConfidence,
+  type BillField,
+  type BillIssue,
+} from "@/lib/bill-checks";
 import { useEco, type BillData } from "@/lib/eco-store";
 import { fa, faDigits } from "@/lib/fa";
 import { cn } from "@/lib/utils";
@@ -16,9 +41,15 @@ export const Route = createFileRoute("/bill")({
   head: () => ({
     meta: [
       { title: "تأیید اطلاعات قبض | اکوسولار" },
-      { name: "description", content: "بارگذاری عکس قبض برق، استخراج خودکار مصرف با هوش مصنوعی و بررسی ناسازگاری‌ها." },
+      {
+        name: "description",
+        content: "بارگذاری عکس قبض برق، استخراج خودکار مصرف با هوش مصنوعی و بررسی ناسازگاری‌ها.",
+      },
       { property: "og:title", content: "تأیید اطلاعات قبض | اکوسولار" },
-      { property: "og:description", content: "بارگذاری عکس قبض برق و استخراج خودکار مصرف با هوش مصنوعی." },
+      {
+        property: "og:description",
+        content: "بارگذاری عکس قبض برق و استخراج خودکار مصرف با هوش مصنوعی.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -37,7 +68,9 @@ const FIELDS: { key: FieldKey; ai: BillField; label: string; unit?: string; nume
   { key: "total", ai: "amountRial", label: "مبلغ کل قبض", unit: "ریال", numeric: true },
 ];
 
-const AI_TO_KEY: Partial<Record<BillField, FieldKey>> = Object.fromEntries(FIELDS.map((f) => [f.ai, f.key]));
+const AI_TO_KEY: Partial<Record<BillField, FieldKey>> = Object.fromEntries(
+  FIELDS.map((f) => [f.ai, f.key]),
+);
 
 const toLatin = (s: string) => s.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
 
@@ -155,10 +188,14 @@ function BillScreen() {
       setManual(false);
       setEditing(null);
       toast.success("قبض با هوش مصنوعی خوانده شد", {
-        description: merged.length ? `${fa(merged.length)} مورد نیاز به بررسی دارد` : "ناسازگاری‌ای پیدا نشد",
+        description: merged.length
+          ? `${fa(merged.length)} مورد نیاز به بررسی دارد`
+          : "ناسازگاری‌ای پیدا نشد",
       });
     } catch {
-      toast.error("خواندن قبض ناموفق بود", { description: "اتصال را بررسی کنید و دوباره تلاش کنید." });
+      toast.error("خواندن قبض ناموفق بود", {
+        description: "اتصال را بررسی کنید و دوباره تلاش کنید.",
+      });
     } finally {
       setScanning(false);
       if (fileRef.current) fileRef.current.value = "";
@@ -169,7 +206,11 @@ function BillScreen() {
     reviewed(key);
     setDraft((d) => ({
       ...d,
-      [key]: numeric ? Number(toLatin(raw).replace(/\D/g, "") || 0) : key === "id" ? toLatin(raw).replace(/\D/g, "") : raw,
+      [key]: numeric
+        ? Number(toLatin(raw).replace(/\D/g, "") || 0)
+        : key === "id"
+          ? toLatin(raw).replace(/\D/g, "")
+          : raw,
     }));
   }
 
@@ -184,7 +225,11 @@ function BillScreen() {
       edited: dirty,
       issue_count: issues?.length ?? 0,
     });
-    toast.success(dirty ? `تغییرات با شماره بازبینی ${faDigits(state.billRevision + 1)} ذخیره شد` : "اطلاعات قبض تأیید شد");
+    toast.success(
+      dirty
+        ? `تغییرات با شماره بازبینی ${faDigits(state.billRevision + 1)} ذخیره شد`
+        : "اطلاعات قبض تأیید شد",
+    );
     navigate({ to: "/optimize" });
   }
 
@@ -231,7 +276,11 @@ function BillScreen() {
             ) : (
               <div className="size-full space-y-2.5 rounded-lg bg-background p-4">
                 {[85, 100, 60, 90, 55, 80, 70].map((w, i) => (
-                  <div key={i} className="ms-auto h-2 rounded-full bg-track" style={{ width: `${w}%` }} />
+                  <div
+                    key={i}
+                    className="ms-auto h-2 rounded-full bg-track"
+                    style={{ width: `${w}%` }}
+                  />
                 ))}
               </div>
             )}
@@ -243,10 +292,23 @@ function BillScreen() {
             ].map((c) => (
               <span key={c} className={cn("absolute size-8 border-sun-deep", c)} />
             ))}
-            <span className={cn("absolute -inset-x-5 top-1/2 h-0.5 bg-sun-deep", scanning && "animate-scan")} />
+            <span
+              className={cn(
+                "absolute -inset-x-5 top-1/2 h-0.5 bg-sun-deep",
+                scanning && "animate-scan",
+              )}
+            />
           </button>
-          <Pill tone={scanning ? "sun" : "success"} size="sm" className="absolute right-4 top-4 h-7 px-3 text-xs">
-            {scanning ? <Loader2 className="size-3.5 animate-spin" /> : <span className="size-1.5 rounded-full bg-success" />}
+          <Pill
+            tone={scanning ? "sun" : "success"}
+            size="sm"
+            className="absolute right-4 top-4 h-7 px-3 text-xs"
+          >
+            {scanning ? (
+              <Loader2 className="size-3.5 animate-spin" />
+            ) : (
+              <span className="size-1.5 rounded-full bg-success" />
+            )}
             {scanning ? "هوش مصنوعی در حال خواندن قبض..." : `اطمینان استخراج ${fa(confidence)}٪`}
           </Pill>
           <button
@@ -270,7 +332,9 @@ function BillScreen() {
 
       <SunPanel>
         <h2 className="text-xl font-extrabold">داده‌های استخراج‌شده</h2>
-        <p className="mt-1 text-xs text-foreground/75">هر مقدار را بررسی کنید؛ مبنای تحلیل همین داده‌هاست</p>
+        <p className="mt-1 text-xs text-foreground/75">
+          هر مقدار را بررسی کنید؛ مبنای تحلیل همین داده‌هاست
+        </p>
 
         <div className="mt-4 rounded-[1.75rem] bg-card px-3 py-1">
           {FIELDS.map((f, idx) => {
@@ -299,15 +363,28 @@ function BillScreen() {
                     autoFocus={editing === f.key}
                     aria-label={f.label}
                     inputMode={f.numeric || f.key === "id" ? "numeric" : "text"}
-                    value={typeof value === "number" ? faDigits(value) : f.key === "id" ? faDigits(value) : value}
+                    value={
+                      typeof value === "number"
+                        ? faDigits(value)
+                        : f.key === "id"
+                          ? faDigits(value)
+                          : value
+                    }
                     onChange={(e) => setField(f.key, e.target.value, f.numeric)}
                     onKeyDown={(e) => e.key === "Enter" && setEditing(null)}
                     className="w-36 rounded-xl bg-background px-3 py-1.5 text-left text-sm font-extrabold outline-none focus:ring-2 focus:ring-sun-deep"
                     dir={f.numeric || f.key === "id" ? "ltr" : "rtl"}
                   />
                 ) : (
-                  <span className="num text-sm font-extrabold" dir={f.unit === "kWh" ? "ltr" : "rtl"}>
-                    {value === "" ? "—" : f.unit ? `${display(f.key, value)} ${f.unit}` : display(f.key, value)}
+                  <span
+                    className="num text-sm font-extrabold"
+                    dir={f.unit === "kWh" ? "ltr" : "rtl"}
+                  >
+                    {value === ""
+                      ? "—"
+                      : f.unit
+                        ? `${display(f.key, value)} ${f.unit}`
+                        : display(f.key, value)}
                   </span>
                 )}
                 <button
@@ -322,7 +399,11 @@ function BillScreen() {
                     flagged ? "bg-warn text-ink-foreground" : "bg-background",
                   )}
                 >
-                  {editing === f.key ? <Check className="size-4" /> : <Pencil className="size-3.5" fill="currentColor" />}
+                  {editing === f.key ? (
+                    <Check className="size-4" />
+                  ) : (
+                    <Pencil className="size-3.5" fill="currentColor" />
+                  )}
                 </button>
               </div>
             );
@@ -333,13 +414,18 @@ function BillScreen() {
           issues.length > 0 ? (
             <div className="mt-3 rounded-[1.75rem] bg-card p-4">
               <p className="flex items-center gap-2 text-sm font-extrabold">
-                <TriangleAlert className="size-4 text-warn" /> ناسازگاری‌های شناسایی‌شده ({fa(issues.length)})
+                <TriangleAlert className="size-4 text-warn" /> ناسازگاری‌های شناسایی‌شده (
+                {fa(issues.length)})
               </p>
               <ul className="mt-2 space-y-2">
                 {issues.map((i, n) => (
                   <li key={n} className="flex gap-2 text-xs leading-6 text-foreground/85">
                     <span className="mt-1 shrink-0">
-                      {i.source === "ai" ? <Sparkles className="size-3.5 text-sun-deep" /> : <span className="block size-2 translate-y-1 rounded-full bg-warn" />}
+                      {i.source === "ai" ? (
+                        <Sparkles className="size-3.5 text-sun-deep" />
+                      ) : (
+                        <span className="block size-2 translate-y-1 rounded-full bg-warn" />
+                      )}
                     </span>
                     <span>
                       <b>{fieldLabel(i.field)}:</b> {faDigits(i.message)}
@@ -356,7 +442,9 @@ function BillScreen() {
         ) : null}
 
         <div className="mt-5 flex gap-3">
-          <InkButton onClick={confirmAndContinue} disabled={scanning}>تأیید و ادامه</InkButton>
+          <InkButton onClick={confirmAndContinue} disabled={scanning}>
+            تأیید و ادامه
+          </InkButton>
           <WhiteButton
             onClick={() => {
               setManual((m) => !m);
@@ -381,10 +469,17 @@ function BillScreen() {
       >
         <ul className="mb-4 space-y-2">
           {pending.map((f) => (
-            <li key={f.key} className="flex justify-between rounded-2xl bg-card px-4 py-3 text-sm shadow-soft">
+            <li
+              key={f.key}
+              className="flex justify-between rounded-2xl bg-card px-4 py-3 text-sm shadow-soft"
+            >
               <span className="text-muted-foreground">{f.label}</span>
               <span className="num font-extrabold" dir={f.unit === "kWh" ? "ltr" : "rtl"}>
-                {draft[f.key] === "" ? "—" : f.unit ? `${display(f.key, draft[f.key])} ${f.unit}` : display(f.key, draft[f.key])}
+                {draft[f.key] === ""
+                  ? "—"
+                  : f.unit
+                    ? `${display(f.key, draft[f.key])} ${f.unit}`
+                    : display(f.key, draft[f.key])}
               </span>
             </li>
           ))}
@@ -417,9 +512,14 @@ function BillScreen() {
 
       <Sheet open={infoOpen} onOpenChange={setInfoOpen} title="راهنمای تأیید قبض">
         <ul className="space-y-3 text-sm leading-7 text-foreground/85">
-          <li>• روی کادر قبض یا «عکس مجدد» بزنید و از قبض برق خود عکس بگیرید یا عکس آن را انتخاب کنید.</li>
+          <li>
+            • روی کادر قبض یا «عکس مجدد» بزنید و از قبض برق خود عکس بگیرید یا عکس آن را انتخاب کنید.
+          </li>
           <li>• هوش مصنوعی شناسه، دوره، مصرف اوج، میان‌باری، کم‌باری و مبلغ را استخراج می‌کند.</li>
-          <li>• ردیف نارنجی یعنی اطمینان پایین است یا با بقیه قبض همخوانی ندارد؛ آن را با قبض مقایسه کنید.</li>
+          <li>
+            • ردیف نارنجی یعنی اطمینان پایین است یا با بقیه قبض همخوانی ندارد؛ آن را با قبض مقایسه
+            کنید.
+          </li>
           <li>• برای اصلاح هر مقدار روی آیکن مداد بزنید یا «اصلاح دستی» را انتخاب کنید.</li>
         </ul>
       </Sheet>

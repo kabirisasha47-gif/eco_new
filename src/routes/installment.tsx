@@ -5,7 +5,15 @@ import { toast } from "sonner";
 
 import { Sheet } from "@/components/eco/Sheet";
 import { Gauge, HBar } from "@/components/eco/charts";
-import { InkButton, PanelTitle, Pill, Screen, ScreenHeader, SunPanel, TopArea } from "@/components/eco/ui";
+import {
+  InkButton,
+  PanelTitle,
+  Pill,
+  Screen,
+  ScreenHeader,
+  SunPanel,
+  TopArea,
+} from "@/components/eco/ui";
 import { Slider } from "@/components/ui/slider";
 import {
   coverageByYear,
@@ -94,11 +102,15 @@ function InstallmentScreen() {
         <div className="mt-4 grid grid-cols-2 gap-3">
           <div className="rounded-3xl bg-card p-4 shadow-soft">
             <p className="text-xs text-muted-foreground">درآمد ماهانه FIT</p>
-            <p className="num mt-2 text-base font-extrabold">{faFixed(income / M, 2)} میلیون ریال</p>
+            <p className="num mt-2 text-base font-extrabold">
+              {faFixed(income / M, 2)} میلیون ریال
+            </p>
           </div>
           <div className="rounded-3xl bg-card p-4 shadow-soft">
             <p className="text-xs text-muted-foreground">قسط ماهانه</p>
-            <p className="num mt-2 text-base font-extrabold">{faFixed(installment / M, 2)} میلیون ریال</p>
+            <p className="num mt-2 text-base font-extrabold">
+              {faFixed(installment / M, 2)} میلیون ریال
+            </p>
           </div>
         </div>
 
@@ -111,13 +123,17 @@ function InstallmentScreen() {
           </div>
         ) : (
           <div className="mt-3 flex justify-center">
-            <Pill tone="success" className="h-10 text-sm">درآمد کل قسط را پوشش می‌دهد</Pill>
+            <Pill tone="success" className="h-10 text-sm">
+              درآمد کل قسط را پوشش می‌دهد
+            </Pill>
           </div>
         )}
 
         <div className="mt-5 flex items-center justify-between gap-2">
           <h2 className="text-lg font-extrabold">مسیر چندساله</h2>
-          <Pill tone="sun" size="sm" className="h-7 px-3 font-medium">سناریو، فرض تعدیل ۵۰٪ سالانه نرخ</Pill>
+          <Pill tone="sun" size="sm" className="h-7 px-3 font-medium">
+            سناریو، فرض تعدیل ۵۰٪ سالانه نرخ
+          </Pill>
         </div>
         <div className="mt-3 grid grid-cols-3 gap-3">
           {years.map((r, i) => (
@@ -135,7 +151,9 @@ function InstallmentScreen() {
       </TopArea>
 
       <SunPanel>
-        <PanelTitle aside={<span className="text-xs text-foreground/70">سه راهکار</span>}>چه کار کنم؟</PanelTitle>
+        <PanelTitle aside={<span className="text-xs text-foreground/70">سه راهکار</span>}>
+          چه کار کنم؟
+        </PanelTitle>
         <div className="mt-2" role="radiogroup" aria-label="راهکارها">
           {strategies.map((s) => {
             const active = strategy === s.id;
@@ -180,7 +198,12 @@ function InstallmentScreen() {
         </InkButton>
       </SunPanel>
 
-      <Sheet open={loanOpen} onOpenChange={setLoanOpen} title="ویرایش مشخصات وام" description="شبیه‌سازی بلافاصله به‌روز می‌شود.">
+      <Sheet
+        open={loanOpen}
+        onOpenChange={setLoanOpen}
+        title="ویرایش مشخصات وام"
+        description="شبیه‌سازی بلافاصله به‌روز می‌شود."
+      >
         <div className="space-y-6">
           <LoanSlider
             label="مبلغ وام"
@@ -210,7 +233,11 @@ function InstallmentScreen() {
             onChange={(v) => setDraft((d) => ({ ...d, months: v }))}
           />
           <div className="rounded-3xl bg-card p-4 text-sm shadow-soft">
-            قسط ماهانه: <b className="num">{faFixed(monthlyInstallment(draft.amount, draft.rate, draft.months) / M, 2)} میلیون ریال</b>
+            قسط ماهانه:{" "}
+            <b className="num">
+              {faFixed(monthlyInstallment(draft.amount, draft.rate, draft.months) / M, 2)} میلیون
+              ریال
+            </b>
           </div>
           <InkButton
             className="w-full flex-none"

@@ -22,7 +22,13 @@ export function productionAt(h: number, peak = 3.6) {
   return peak * Math.exp(-Math.pow(h - 12, 2) / (2 * 2.35 * 2.35));
 }
 
-export function ProductionChart({ nowHour = 14.6, peak = 3.6 }: { nowHour?: number; peak?: number }) {
+export function ProductionChart({
+  nowHour = 14.6,
+  peak = 3.6,
+}: {
+  nowHour?: number;
+  peak?: number;
+}) {
   const W = 320;
   const H = 210;
   const left = 8;
@@ -62,8 +68,20 @@ export function ProductionChart({ nowHour = 14.6, peak = 3.6 }: { nowHour?: numb
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="نمودار تولید امروز">
         {[0, 2, 4].map((t) => (
           <g key={t}>
-            <line x1={left} x2={right} y1={y(t)} y2={y(t)} className="stroke-track-strong" strokeDasharray="2 4" />
-            <text x={W - 6} y={y(t) + 4} textAnchor="end" className="fill-muted-foreground text-[10px]">
+            <line
+              x1={left}
+              x2={right}
+              y1={y(t)}
+              y2={y(t)}
+              className="stroke-track-strong"
+              strokeDasharray="2 4"
+            />
+            <text
+              x={W - 6}
+              y={y(t) + 4}
+              textAnchor="end"
+              className="fill-muted-foreground text-[10px]"
+            >
               {faDigits(t)}
             </text>
           </g>
@@ -72,18 +90,54 @@ export function ProductionChart({ nowHour = 14.6, peak = 3.6 }: { nowHour?: numb
           kW
         </text>
         <path d={areaPath} className="fill-sun-soft" />
-        <path d={linePath(actual)} className="fill-none stroke-sun-deep" strokeWidth="2.5" strokeLinecap="round" />
+        <path
+          d={linePath(actual)}
+          className="fill-none stroke-sun-deep"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
         <path d={bandPath} className="fill-sun-soft" opacity="0.8" />
-        <path d={linePath(forecast)} className="fill-none stroke-sun-deep" strokeWidth="2" strokeDasharray="4 4" />
-        <line x1={x(12)} x2={x(12)} y1={top - 8} y2={y(peak)} className="stroke-sun-deep" strokeDasharray="2 3" />
-        <line x1={x(nowHour)} x2={x(nowHour)} y1={top - 8} y2={bottom} className="stroke-track-strong" strokeDasharray="3 3" />
-        <circle cx={x(nowHour)} cy={nowY} r="6" className="fill-card stroke-sun-deep" strokeWidth="2.5" />
+        <path
+          d={linePath(forecast)}
+          className="fill-none stroke-sun-deep"
+          strokeWidth="2"
+          strokeDasharray="4 4"
+        />
+        <line
+          x1={x(12)}
+          x2={x(12)}
+          y1={top - 8}
+          y2={y(peak)}
+          className="stroke-sun-deep"
+          strokeDasharray="2 3"
+        />
+        <line
+          x1={x(nowHour)}
+          x2={x(nowHour)}
+          y1={top - 8}
+          y2={bottom}
+          className="stroke-track-strong"
+          strokeDasharray="3 3"
+        />
+        <circle
+          cx={x(nowHour)}
+          cy={nowY}
+          r="6"
+          className="fill-card stroke-sun-deep"
+          strokeWidth="2.5"
+        />
         {[
           [6, "۶ صبح"],
           [12, "۱۲ ظهر"],
           [18, "۶ عصر"],
         ].map(([h, l]) => (
-          <text key={l} x={x(h as number)} y={H - 4} textAnchor="middle" className="fill-muted-foreground text-[10px]">
+          <text
+            key={l}
+            x={x(h as number)}
+            y={H - 4}
+            textAnchor="middle"
+            className="fill-muted-foreground text-[10px]"
+          >
             {l}
           </text>
         ))}
@@ -146,7 +200,11 @@ export function BarChart({
       <div className="relative mt-2 flex gap-2" style={{ height }}>
         <div className="relative w-7 shrink-0 text-[10px] text-muted-foreground">
           {ticks.map((t) => (
-            <span key={t} className="absolute right-0 -translate-y-1/2" style={{ top: `${(1 - t / max) * 100}%` }}>
+            <span
+              key={t}
+              className="absolute right-0 -translate-y-1/2"
+              style={{ top: `${(1 - t / max) * 100}%` }}
+            >
               {fa(t)}
             </span>
           ))}
@@ -171,7 +229,8 @@ export function BarChart({
                   className="relative flex h-full flex-1 items-end"
                 >
                   {isSel && tooltip ? (
-                    <span className="absolute left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-card px-3 py-1.5 text-xs font-extrabold shadow-soft"
+                    <span
+                      className="absolute left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-card px-3 py-1.5 text-xs font-extrabold shadow-soft"
                       style={{ bottom: `calc(${(d.value / max) * 100}% + 10px)` }}
                     >
                       {tooltip(d, i)}
@@ -243,7 +302,15 @@ export interface SetpointStep {
   temp: number;
 }
 
-export function TempPlanChart({ steps, shift = 0, preCool }: { steps: SetpointStep[]; shift?: number; preCool: number }) {
+export function TempPlanChart({
+  steps,
+  shift = 0,
+  preCool,
+}: {
+  steps: SetpointStep[];
+  shift?: number;
+  preCool: number;
+}) {
   const W = 320;
   const H = 220;
   const left = 10;
@@ -280,28 +347,66 @@ export function TempPlanChart({ steps, shift = 0, preCool }: { steps: SetpointSt
         <span>درجه</span>
       </div>
       <svg viewBox={`0 0 ${W} ${H}`} className="mt-2 w-full" role="img" aria-label="برنامه دمایی">
-        <rect x={x(19)} y={top} width={x(23) - x(19)} height={bottom - top} className="fill-danger-soft" />
-        <text x={(x(19) + x(23)) / 2} y={top + 16} textAnchor="middle" className="fill-danger text-[10px] font-bold">
+        <rect
+          x={x(19)}
+          y={top}
+          width={x(23) - x(19)}
+          height={bottom - top}
+          className="fill-danger-soft"
+        />
+        <text
+          x={(x(19) + x(23)) / 2}
+          y={top + 16}
+          textAnchor="middle"
+          className="fill-danger text-[10px] font-bold"
+        >
           اوج تعرفه
         </text>
         {[20, 30, 40].map((t) => (
           <g key={t}>
-            <line x1={left} x2={right} y1={y(t)} y2={y(t)} className="stroke-track-strong" strokeDasharray="2 4" />
-            <text x={W - 4} y={y(t) + 4} textAnchor="end" className="fill-muted-foreground text-[10px]">
+            <line
+              x1={left}
+              x2={right}
+              y1={y(t)}
+              y2={y(t)}
+              className="stroke-track-strong"
+              strokeDasharray="2 4"
+            />
+            <text
+              x={W - 4}
+              y={y(t) + 4}
+              textAnchor="end"
+              className="fill-muted-foreground text-[10px]"
+            >
               {faDigits(t)}
             </text>
           </g>
         ))}
         <path d={stepFill} className="fill-sun-soft" />
-        <path d={linePath(stepPts)} className="fill-none stroke-sun-deep" strokeWidth="2.5" strokeLinejoin="round" />
-        <path d={linePath(outside)} className="fill-none stroke-muted-foreground" strokeWidth="1.5" />
+        <path
+          d={linePath(stepPts)}
+          className="fill-none stroke-sun-deep"
+          strokeWidth="2.5"
+          strokeLinejoin="round"
+        />
+        <path
+          d={linePath(outside)}
+          className="fill-none stroke-muted-foreground"
+          strokeWidth="1.5"
+        />
         {[
           [3, "۳"],
           [9, "۹"],
           [15, "۱۵"],
           [21, "۲۱"],
         ].map(([h, l]) => (
-          <text key={l} x={x(h as number)} y={H - 6} textAnchor="middle" className="fill-muted-foreground text-[10px]">
+          <text
+            key={l}
+            x={x(h as number)}
+            y={H - 6}
+            textAnchor="middle"
+            className="fill-muted-foreground text-[10px]"
+          >
             {l}
           </text>
         ))}
@@ -337,14 +442,25 @@ export function Gauge({ ratio, label }: { ratio: number; label: string }) {
   return (
     <div className="relative mx-auto mt-6 w-64">
       <svg viewBox="0 0 240 140" className="w-full" role="img" aria-label={label}>
-        <path d={`M${cx - r} ${cy} A${r} ${r} 0 0 1 ${cx + r} ${cy}`} className="fill-none stroke-track" strokeWidth="18" strokeLinecap="round" />
+        <path
+          d={`M${cx - r} ${cy} A${r} ${r} 0 0 1 ${cx + r} ${cy}`}
+          className="fill-none stroke-track"
+          strokeWidth="18"
+          strokeLinecap="round"
+        />
         <path
           d={`M${cx - r} ${cy} A${r} ${r} 0 0 1 ${f2(ex)} ${f2(ey)}`}
           className="fill-none stroke-sun-deep transition-all duration-700"
           strokeWidth="18"
           strokeLinecap="round"
         />
-        <circle cx={f2(ex)} cy={f2(ey)} r="10" className="fill-card stroke-sun-deep" strokeWidth="4" />
+        <circle
+          cx={f2(ex)}
+          cy={f2(ey)}
+          r="10"
+          className="fill-card stroke-sun-deep"
+          strokeWidth="4"
+        />
       </svg>
       <div className="absolute inset-x-0 top-[44%] text-center">
         <div className="num text-5xl font-black leading-none">{fa(Math.round(ratio * 100))}٪</div>
@@ -362,7 +478,15 @@ export function Gauge({ ratio, label }: { ratio: number; label: string }) {
 /* Horizontal progress (RTL fill from the right)                        */
 /* ------------------------------------------------------------------ */
 
-export function HBar({ ratio, className, trackClassName }: { ratio: number; className?: string; trackClassName?: string }) {
+export function HBar({
+  ratio,
+  className,
+  trackClassName,
+}: {
+  ratio: number;
+  className?: string;
+  trackClassName?: string;
+}) {
   return (
     <div className={cn("h-3 w-full overflow-hidden rounded-full bg-track", trackClassName)}>
       <div

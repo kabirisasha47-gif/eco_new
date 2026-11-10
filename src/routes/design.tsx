@@ -19,7 +19,12 @@ import {
   Switch,
   TopArea,
 } from "@/components/eco/ui";
-import { ANNUAL_PRODUCTION_KWH, BATTERY_FIT_RATE, MIN_BATTERY_KWH, MONTHLY_PRODUCTION_KWH } from "@/lib/eco-calc";
+import {
+  ANNUAL_PRODUCTION_KWH,
+  BATTERY_FIT_RATE,
+  MIN_BATTERY_KWH,
+  MONTHLY_PRODUCTION_KWH,
+} from "@/lib/eco-calc";
 import { useEco } from "@/lib/eco-store";
 import { fa, faDigits, SHAMSI_MONTHS } from "@/lib/fa";
 
@@ -27,9 +32,15 @@ export const Route = createFileRoute("/design")({
   head: () => ({
     meta: [
       { title: "طرح پیشنهادی نیروگاه | اکوسولار" },
-      { name: "description", content: "طراحی خودکار نیروگاه خورشیدی ۵ کیلوواتی با تولید ماهانه و مشخصات فنی." },
+      {
+        name: "description",
+        content: "طراحی خودکار نیروگاه خورشیدی ۵ کیلوواتی با تولید ماهانه و مشخصات فنی.",
+      },
       { property: "og:title", content: "طرح پیشنهادی نیروگاه | اکوسولار" },
-      { property: "og:description", content: "طراحی خودکار نیروگاه خورشیدی با تولید ماهانه و مشخصات فنی." },
+      {
+        property: "og:description",
+        content: "طراحی خودکار نیروگاه خورشیدی با تولید ماهانه و مشخصات فنی.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -49,7 +60,11 @@ function DesignScreen() {
   return (
     <Screen>
       <TopArea>
-        <ScreenHeader title="طرح پیشنهادی نیروگاه" subtitle="سرویس ۲ هوش مصنوعی" backTo="/optimize" />
+        <ScreenHeader
+          title="طرح پیشنهادی نیروگاه"
+          subtitle="سرویس ۲ هوش مصنوعی"
+          backTo="/optimize"
+        />
         <HeroStat
           label="ظرفیت پیشنهادی"
           value="۵"
@@ -70,7 +85,9 @@ function DesignScreen() {
           <Pill tone="sun" className="font-extrabold">
             تولید سالانه {fa(ANNUAL_PRODUCTION_KWH)} kWh
           </Pill>
-          <Pill tone="white" className="font-medium text-foreground/70 shadow-soft">سایه‌اندازی ۶٪</Pill>
+          <Pill tone="white" className="font-medium text-foreground/70 shadow-soft">
+            سایه‌اندازی ۶٪
+          </Pill>
         </div>
         <BarChart
           data={data}
@@ -84,10 +101,15 @@ function DesignScreen() {
       </TopArea>
 
       <SunPanel>
-        <PanelTitle aside={<InfoCircleButton onClick={() => setInfoOpen(true)} />}>مشخصات طرح</PanelTitle>
+        <PanelTitle aside={<InfoCircleButton onClick={() => setInfoOpen(true)} />}>
+          مشخصات طرح
+        </PanelTitle>
         <div className="mt-2">
           <InfoRow label="پنل" value="۹ عدد ۵۵۰ وات" />
-          <InfoRow label="اینورتر" value={state.battery ? "هیبرید ۵ کیلووات، ۲ MPPT" : "متصل به شبکه ۵ کیلووات، ۲ MPPT"} />
+          <InfoRow
+            label="اینورتر"
+            value={state.battery ? "هیبرید ۵ کیلووات، ۲ MPPT" : "متصل به شبکه ۵ کیلووات، ۲ MPPT"}
+          />
           <InfoRow label="مساحت لازم بام" value="۲۸ از ۶۴ متر مربع" />
           <InfoRow label="جهت و شیب" value="جنوب، ۳۰ درجه" last={mode === "simple"} />
           {mode === "detailed" ? (
@@ -106,17 +128,29 @@ function DesignScreen() {
           <div className="min-w-0 flex-1">
             <p className="font-extrabold">نسخه باتری‌دار</p>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              حداقل {fa(MIN_BATTERY_KWH, 1)} kWh باتری، شرط نرخ {fa(BATTERY_FIT_RATE, 0, false)} ریال
+              حداقل {fa(MIN_BATTERY_KWH, 1)} kWh باتری، شرط نرخ {fa(BATTERY_FIT_RATE, 0, false)}{" "}
+              ریال
             </p>
-            <p className="mt-0.5 text-[0.65rem] text-muted-foreground/80">شارژ باتری از شبکه مجاز نیست</p>
+            <p className="mt-0.5 text-[0.65rem] text-muted-foreground/80">
+              شارژ باتری از شبکه مجاز نیست
+            </p>
           </div>
           <Switch
             label="نسخه باتری‌دار"
             checked={state.battery}
             onChange={(v) => {
-              update({ battery: v, channel: v ? "fit-battery" : state.channel === "fit-battery" ? "fit-base" : state.channel });
+              update({
+                battery: v,
+                channel: v
+                  ? "fit-battery"
+                  : state.channel === "fit-battery"
+                    ? "fit-base"
+                    : state.channel,
+              });
               toast(v ? "نسخه باتری‌دار فعال شد" : "نسخه بدون باتری انتخاب شد", {
-                description: v ? "کانال خرید تضمینی باتری‌دار در دسترس است" : "کانال خرید تضمینی پایه پیشنهاد می‌شود",
+                description: v
+                  ? "کانال خرید تضمینی باتری‌دار در دسترس است"
+                  : "کانال خرید تضمینی پایه پیشنهاد می‌شود",
               });
             }}
           />
@@ -129,7 +163,10 @@ function DesignScreen() {
 
       <Sheet open={infoOpen} onOpenChange={setInfoOpen} title="طرح چگونه محاسبه شد؟">
         <div className="space-y-3 text-sm leading-7 text-foreground/85">
-          <p>ظرفیت بر اساس مصرف سالانه قبض، مساحت قابل استفاده بام و تابش خورشید در نجف‌آباد انتخاب شده است.</p>
+          <p>
+            ظرفیت بر اساس مصرف سالانه قبض، مساحت قابل استفاده بام و تابش خورشید در نجف‌آباد انتخاب
+            شده است.
+          </p>
           <p>تولید ماهانه با در نظر گرفتن ۶٪ سایه‌اندازی و ۱۴٪ تلفات سیستم برآورد شده است.</p>
         </div>
       </Sheet>

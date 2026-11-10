@@ -35,7 +35,12 @@ export function NotificationsSheet({
   onOpenChange: (o: boolean) => void;
 }) {
   return (
-    <Sheet open={open} onOpenChange={onOpenChange} title="اعلان‌ها" description="آخرین رویدادهای نیروگاه شما">
+    <Sheet
+      open={open}
+      onOpenChange={onOpenChange}
+      title="اعلان‌ها"
+      description="آخرین رویدادهای نیروگاه شما"
+    >
       <ul className="space-y-3">
         {ITEMS.map((it) => (
           <li key={it.title}>
@@ -52,7 +57,9 @@ export function NotificationsSheet({
                   <span className="text-sm font-extrabold">{it.title}</span>
                   <span className="shrink-0 text-[0.65rem] text-muted-foreground">{it.time}</span>
                 </span>
-                <span className="mt-1 block text-xs leading-5 text-muted-foreground">{it.body}</span>
+                <span className="mt-1 block text-xs leading-5 text-muted-foreground">
+                  {it.body}
+                </span>
               </span>
             </Link>
           </li>

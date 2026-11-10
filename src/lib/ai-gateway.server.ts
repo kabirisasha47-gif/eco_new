@@ -15,7 +15,8 @@ function createLovableAiGatewayRunIdFetch(initialRunId?: string) {
     getRunId: () => runId,
     fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
       const headers = new Headers(init?.headers);
-      if (runId && !headers.has(LOVABLE_AIG_RUN_ID_HEADER)) headers.set(LOVABLE_AIG_RUN_ID_HEADER, runId);
+      if (runId && !headers.has(LOVABLE_AIG_RUN_ID_HEADER))
+        headers.set(LOVABLE_AIG_RUN_ID_HEADER, runId);
       const response = await fetch(input, { ...init, headers });
       runId ??= response.headers.get(LOVABLE_AIG_RUN_ID_HEADER)?.trim() || undefined;
       return response;
@@ -24,7 +25,16 @@ function createLovableAiGatewayRunIdFetch(initialRunId?: string) {
 }
 
 const confidence = z.enum(["high", "medium", "low"]);
-const fieldEnum = z.enum(["billId", "period", "peakKwh", "midKwh", "lowKwh", "totalKwh", "amountRial", "general"]);
+const fieldEnum = z.enum([
+  "billId",
+  "period",
+  "peakKwh",
+  "midKwh",
+  "lowKwh",
+  "totalKwh",
+  "amountRial",
+  "general",
+]);
 
 // Strict-compatible: single object root, every property required, optional values nullable.
 const billSchema = z.object({
@@ -62,8 +72,7 @@ Extract only what is printed on the bill. Never guess a value you cannot read; u
 Do not include names, addresses or other personal data anywhere in the output.`;
 
 export type BillExtractionResult =
-  | { ok: true; bill: ExtractedBill }
-  | { ok: false; status: number; message: string };
+  { ok: true; bill: ExtractedBill } | { ok: false; status: number; message: string };
 
 function findApiError(error: unknown): APICallError | null {
   let cur: unknown = error;
@@ -76,7 +85,10 @@ function findApiError(error: unknown): APICallError | null {
 
 function safeGatewayMessage(err: APICallError): string | null {
   try {
-    const body = JSON.parse(err.responseBody ?? "{}") as { message?: string; error?: { message?: string } };
+    const body = JSON.parse(err.responseBody ?? "{}") as {
+      message?: string;
+      error?: { message?: string };
+    };
     return body.error?.message ?? body.message ?? null;
   } catch {
     return null;
@@ -104,7 +116,10 @@ export async function extractBillFromImage(
         {
           role: "user",
           content: [
-            { type: "text", text: "Extract the bill data from this photo and list any inconsistencies." },
+            {
+              type: "text",
+              text: "Extract the bill data from this photo and list any inconsistencies.",
+            },
             { type: "image", image: new URL(imageDataUrl) },
           ],
         },
@@ -136,21 +151,45 @@ export async function extractBillFromImage(
       const upstream = safeGatewayMessage(api);
       console.error("bill extraction gateway error", status, upstream);
       if (status === 402) {
-        return { ok: false, status, message: upstream ?? "اعتبار هوش مصنوعی این برنامه تمام شده است." };
+        return {
+          ok: false,
+          status,
+          message: upstream ?? "اعتبار هوش مصنوعی این برنامه تمام شده است.",
+        };
       }
       if (status === 429) {
-        return { ok: false, status, message: "تعداد درخواست‌ها زیاد است؛ چند لحظه بعد دوباره تلاش کنید." };
+        return {
+          ok: false,
+          status,
+          message: "تعداد درخواست‌ها زیاد است؛ چند لحظه بعد دوباره تلاش کنید.",
+        };
       }
       if (status === 403) {
-        return { ok: false, status, message: upstream ?? "دسترسی به سرویس هوش مصنوعی امکان‌پذیر نیست." };
+        return {
+          ok: false,
+          status,
+          message: upstream ?? "دسترسی به سرویس هوش مصنوعی امکان‌پذیر نیست.",
+        };
       }
       if (status === 400) {
-        return { ok: false, status, message: "تصویر قابل پردازش نیست؛ یک عکس واضح‌تر (JPG یا PNG) انتخاب کنید." };
+        return {
+          ok: false,
+          status,
+          message: "تصویر قابل پردازش نیست؛ یک عکس واضح‌تر (JPG یا PNG) انتخاب کنید.",
+        };
       }
-      return { ok: false, status, message: "سرویس خواندن قبض موقتاً در دسترس نیست؛ کمی بعد دوباره تلاش کنید." };
+      return {
+        ok: false,
+        status,
+        message: "سرویس خواندن قبض موقتاً در دسترس نیست؛ کمی بعد دوباره تلاش کنید.",
+      };
     }
     if (NoObjectGeneratedError.isInstance(error)) {
-      return { ok: false, status: 422, message: "اطلاعات قبض از این تصویر خوانده نشد؛ عکس واضح‌تری بگیرید." };
+      return {
+        ok: false,
+        status: 422,
+        message: "اطلاعات قبض از این تصویر خوانده نشد؛ عکس واضح‌تری بگیرید.",
+      };
     }
     if (error instanceof Error && error.name === "AbortError") {
       return { ok: false, status: 499, message: "خواندن قبض لغو شد." };

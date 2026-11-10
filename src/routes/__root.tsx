@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { OfflineBanner } from "@/components/eco/PWAInstallBanner";
 import { Toaster } from "@/components/ui/sonner";
 import { EcoProvider } from "@/lib/eco-store";
 
@@ -87,11 +88,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#f4f4f4" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
-      { title: "اکوسولار | مدیریت هوشمند انرژی خورشیدی" },
-      { name: "description", content: "اپلیکیشن اکوسولار: پایش نیروگاه خورشیدی، انتخاب کانال درآمد و صورتحساب خرید تضمینی." },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "اکوسولار" },
+      { title: "اکوسولار | مدیریت هوشمند انرژی خورشیدی (نسخه اندروید)" },
+      {
+        name: "description",
+        content:
+          "اپلیکیشن اندروید و وب‌پروگرسیو (PWA / APK) اکوسولار برای پایش نیروگاه خورشیدی، تحلیل قبض برق، انتخاب کانال درآمد و صورتحساب خرید تضمینی.",
+      },
       { name: "author", content: "EcoSolar" },
-      { property: "og:title", content: "اکوسولار | مدیریت هوشمند انرژی خورشیدی" },
-      { property: "og:description", content: "پایش نیروگاه خورشیدی، انتخاب کانال درآمد و صورتحساب خرید تضمینی." },
+      { property: "og:title", content: "اکوسولار | مدیریت هوشمند انرژی خورشیدی (نسخه اندروید)" },
+      {
+        property: "og:description",
+        content:
+          "اپلیکیشن اندروید و وب‌پروگرسیو (PWA / APK) اکوسولار برای پایش نیروگاه خورشیدی، تحلیل قبض برق، انتخاب کانال درآمد و صورتحساب خرید تضمینی.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -139,6 +150,7 @@ function RootComponent() {
       <EcoProvider>
         <div className="flex min-h-dvh justify-center bg-desk md:py-6">
           <div className="relative flex min-h-dvh w-full max-w-[430px] flex-col overflow-x-hidden bg-background md:min-h-[calc(100dvh-3rem)] md:overflow-hidden md:rounded-[2.75rem] md:shadow-frame">
+            <OfflineBanner />
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
           </div>

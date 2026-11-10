@@ -14,7 +14,8 @@ export function fa(value: number, fractionDigits = 0, groupThousands = true): st
   const fixed = Math.abs(value).toFixed(fractionDigits);
   const [intPart = "0", decPart] = fixed.split(".");
   const grouped = groupThousands ? intPart.replace(/\B(?=(\d{3})+(?!\d))/g, "٬") : intPart;
-  const out = decPart && Number(decPart) !== 0 ? `${grouped},${decPart.replace(/0+$/, "")}` : grouped;
+  const out =
+    decPart && Number(decPart) !== 0 ? `${grouped},${decPart.replace(/0+$/, "")}` : grouped;
   return (negative ? "-" : "") + faDigits(out);
 }
 
