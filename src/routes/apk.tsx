@@ -88,6 +88,7 @@ function ApkCenterScreen() {
   const [infoSheetOpen, setInfoSheetOpen] = useState(false);
   const [qrSheetOpen, setQrSheetOpen] = useState(false);
   const [activeFileTab, setActiveFileTab] = useState<
+    | "android.yml"
     | "manifest.json"
     | "app.json"
     | "build-apk.sh"
@@ -95,7 +96,7 @@ function ApkCenterScreen() {
     | "capacitor.config.json"
     | "AndroidManifest.xml"
     | "assetlinks.json"
-  >("manifest.json");
+  >("android.yml");
   const [lastDownloaded, setLastDownloaded] = useState<string | null>(null);
 
   useEffect(() => {
@@ -120,6 +121,7 @@ function ApkCenterScreen() {
 
   function getGeneratedFileContent(
     tab:
+      | "android.yml"
       | "manifest.json"
       | "app.json"
       | "build-apk.sh"
@@ -129,6 +131,71 @@ function ApkCenterScreen() {
       | "assetlinks.json",
   ): string {
     switch (tab) {
+      case "android.yml":
+        return `name: Android APK Build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  build-android-apk:
+    name: Compile Signed Android APK
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Initialize project and generate package-lock.json
+        run: |
+          npm install --package-lock --legacy-peer-deps
+
+      - name: Build web bundle and pre-render static Android assets
+        run: |
+          npm run build
+          node scripts/prepare-apk-webdir.mjs
+
+      - name: Setup Java JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Initialize Capacitor Android project
+        run: |
+          npm install @capacitor/core @capacitor/cli @capacitor/android --no-save --legacy-peer-deps
+          rm -rf android
+          npx cap add android
+          npx cap sync android
+
+      - name: Build Android APK with Gradle
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Upload Compiled APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecosolar-android-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+`;
       case "manifest.json":
         return JSON.stringify(
           {
@@ -211,6 +278,7 @@ function ApkCenterScreen() {
         targetSdkVersion: APK_META.targetSdkVersion,
         originUrl,
         files: {
+          ".github/workflows/android.yml": getGeneratedFileContent("android.yml"),
           "build-apk.sh": generateBuildApkScript(originUrl, packageId),
           "twa-manifest.json": JSON.parse(generateTwaManifestJson(originUrl, packageId)),
           "capacitor.config.json": JSON.parse(generateCapacitorConfigJson(originUrl, packageId)),
@@ -231,6 +299,7 @@ function ApkCenterScreen() {
 
   function handleDownloadSingleFile(
     tab:
+      | "android.yml"
       | "manifest.json"
       | "app.json"
       | "build-apk.sh"
@@ -560,6 +629,7 @@ function ApkCenterScreen() {
         <div className="flex gap-1.5 overflow-x-auto pb-2 no-scrollbar" dir="ltr">
           {(
             [
+              "android.yml",
               "manifest.json",
               "app.json",
               "build-apk.sh",
