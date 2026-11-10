@@ -84,12 +84,13 @@ function ApkCenterScreen() {
   const [codeSheetOpen, setCodeSheetOpen] = useState(false);
   const [infoSheetOpen, setInfoSheetOpen] = useState(false);
   const [activeFileTab, setActiveFileTab] = useState<
+    | "manifest.json"
     | "build-apk.sh"
     | "twa-manifest.json"
     | "capacitor.config.json"
     | "AndroidManifest.xml"
     | "assetlinks.json"
-  >("build-apk.sh");
+  >("manifest.json");
   const [lastDownloaded, setLastDownloaded] = useState<string | null>(null);
 
   useEffect(() => {
@@ -111,6 +112,7 @@ function ApkCenterScreen() {
 
   function getGeneratedFileContent(
     tab:
+      | "manifest.json"
       | "build-apk.sh"
       | "twa-manifest.json"
       | "capacitor.config.json"
@@ -118,6 +120,46 @@ function ApkCenterScreen() {
       | "assetlinks.json",
   ): string {
     switch (tab) {
+      case "manifest.json":
+        return JSON.stringify(
+          {
+            id: "/",
+            name: APK_META.appFullName,
+            short_name: APK_META.appName,
+            description:
+              "اپلیکیشن مدیریت هوشمند نیروگاه خورشیدی خانگی، تحلیل قبض، انتخاب کانال درآمد و تطبیق صورتحساب خرید تضمینی.",
+            lang: "fa",
+            dir: "rtl",
+            start_url: `${originUrl}/`,
+            scope: `${originUrl}/`,
+            display: "standalone",
+            orientation: "portrait",
+            background_color: "#f4f4f4",
+            theme_color: "#f4f4f4",
+            icons: [
+              {
+                src: `${originUrl}/icon-192.png`,
+                sizes: "192x192",
+                type: "image/png",
+                purpose: "any",
+              },
+              {
+                src: `${originUrl}/icon-512.png`,
+                sizes: "512x512",
+                type: "image/png",
+                purpose: "any",
+              },
+              {
+                src: `${originUrl}/icon-512.png`,
+                sizes: "512x512",
+                type: "image/png",
+                purpose: "maskable",
+              },
+            ],
+          },
+          null,
+          2,
+        );
       case "build-apk.sh":
         return generateBuildApkScript(originUrl, packageId);
       case "twa-manifest.json":
@@ -178,6 +220,7 @@ function ApkCenterScreen() {
 
   function handleDownloadSingleFile(
     tab:
+      | "manifest.json"
       | "build-apk.sh"
       | "twa-manifest.json"
       | "capacitor.config.json"
@@ -284,16 +327,21 @@ function ApkCenterScreen() {
         {/* Primary CTA Buttons right at the top of SunPanel for immediate visibility */}
         <div className="mt-3.5 flex flex-col gap-2">
           <div className="flex gap-2">
-            <InkButton onClick={handleDownloadBundle} className="h-12 gap-2 text-sm">
-              <Download className="size-4" />
-              دانلود بسته کامل ساخت APK
-            </InkButton>
-            <WhiteButton
-              onClick={() => handleDownloadSingleFile("build-apk.sh")}
-              className="h-12 gap-1.5 px-4 text-xs"
+            <a
+              href="/ecosolar-android-project.zip"
+              download="ecosolar-android-project.zip"
+              onClick={() => {
+                setLastDownloaded("ecosolar-android-project.zip");
+                toast.success("پروژه کامل اندروید استودیو (.zip) دانلود شد");
+              }}
+              className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-ink px-5 text-sm font-extrabold text-ink-foreground transition active:scale-[0.98]"
             >
+              <Download className="size-4" />
+              دانلود پروژه اندروید (.zip)
+            </a>
+            <WhiteButton onClick={handleDownloadBundle} className="h-12 gap-1.5 px-4 text-xs">
               <Terminal className="size-4" />
-              اسکریپت ساخت
+              بسته JSON
             </WhiteButton>
           </div>
 
@@ -420,6 +468,7 @@ function ApkCenterScreen() {
         <div className="flex gap-1.5 overflow-x-auto pb-2 no-scrollbar" dir="ltr">
           {(
             [
+              "manifest.json",
               "build-apk.sh",
               "twa-manifest.json",
               "capacitor.config.json",
